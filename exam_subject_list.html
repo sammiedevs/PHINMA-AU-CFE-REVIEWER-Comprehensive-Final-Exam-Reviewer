@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Mock Exam Generator</title>
+</head>
+<style>
+    body {
+        background: #eee;
+    }
+	/* Subject List Styles */
+    .subject-list {
+        width: 100%; /* Make the list take up full width */
+        display: flex;
+        flex-direction: column; /* Stack items vertically */
+        gap: 5px; /* Space between items */
+        padding: 10px;
+    }
+
+    .subject-button {
+        margin-top: 5px;
+        background: #f0f0f0;
+        padding: 15px 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: left; /* Align text to the left */
+        transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        justify-content: space-between; /* Space between subject name and actions */
+        align-items: center;
+		font-size: 16px;
+        width: 100%; /* Make each button take up full width */
+        font-weight: 500;
+    }
+
+    .subject-button:hover {
+        color: white;
+        background: #161041;
+        transform: translateY(-2px); /* Slight lift on hover */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+    }
+    .subject-button:hover .subject-name {
+        color: white; /* Change text color to white on hover */
+    }
+
+    .subject-button .subject-name {
+        font-size: 18px;
+        font-weight: 500;
+        color: #161041; /* Dark blue for subject name */
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between icon and text */
+    }
+
+    .subject-button .subject-name i {
+        font-size: 20px; /* Icon size */
+        color: #F59D37; /* Icon color */
+    }
+
+    .add-subject-button {
+        position: relative;
+        width: 150px;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        border: 1px solid #34974d;
+        background-color: #3aa856;
+        overflow: hidden; /* Ensure the icon doesn't overflow */
+        padding-left: 10px; /* Add left padding to align text */
+        padding-right: 10px;
+    }
+
+    .add-subject-button, .button__icon, .button__text {
+        transition: all 0.3s;
+    }
+
+    .add-subject-button .button__text {
+        color: #fff;
+        font-weight: 600;
+        text-align: left; /* Align text to the left */
+        flex-grow: 1; /* Allow text to take up remaining space */
+    }
+
+    .add-subject-button .button__icon {
+        position: absolute;
+        right: 0; /* Position icon on the right */
+        height: 100%;
+        width: 39px;
+        background-color: #34974d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(calc(100% - 30px)); /* Partially show the icon */
+    }
+
+    .add-subject-button .svg {
+        width: 30px;
+        stroke: #fff;
+        padding-right: 10px;
+    }
+
+    .add-subject-button:hover {
+        background: #34974d;
+    }
+
+    .add-subject-button:hover .button__text {
+        color: transparent; /* Hide text on hover */
+    }
+
+    .add-subject-button:hover .button__icon {
+        width: 100%; /* Expand icon to full width on hover */
+        transform: translateX(0); /* Move icon to the left */
+    }
+
+    .add-subject-button:active .button__icon {
+        background-color: #2e8644; /* Change icon background on active */
+    }
+
+    .add-subject-button:active {
+        border: 1px solid #2e8644; /* Change border color on active */
+    }
+
+
+    .containerrr{
+        background: #161041;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        flex-direction: row; /* Change from column to row */
+        display: flex;
+        margin-top: 10px;
+        gap: 20px; /* Add space between child elements */
+    }
+    .data {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+        display: flex;
+        font-weight: 500;
+    }
+    .data.exam{
+        width: 30vw;
+    }
+
+    .page {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #F59D37;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    .page button {
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .page h1 {
+        font-size: 35px;
+        color: #161041;
+        margin: 0;
+    }
+        
+        
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto; /* Adjust margin to center the modal */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%; /* Wider modal */
+            max-width: 1200px; /* Increase max-width for larger modal */
+            height: 80vh; /* Set height to 80% of viewport height */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        /* PDF Viewer Styles */
+        #pdfFrame {
+            width: 100%;
+            height: calc(100% - 60px); /* Adjust height to fit modal */
+            border: none;
+            margin-top: 20px;
+        }
+</style>
+<body>
+
+    <!-- Sidebar -->
+    <section id="sidebar">
+        <a href="student_dashboard.html" class="brand">
+            <img src="img/logo.jpg">
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="student_dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_reviewer.html">
+                    <i class="fas fa-book"></i>
+                    <span class="text">Study Materials</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="student_practice.html">
+                    <i class="fas fa-tools"></i>
+                    <span class="text">Practice Tools</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_progress.html">
+                    <i class="fas fa-tasks"></i>
+                    <span class="text">Progress Tracking</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_calendar.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="text">Calendar</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_feedback.html">
+                    <i class="fas fa-comments"></i>
+                    <span class="text">Feedback</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu bot">
+            <li>
+                <a href="index.html">
+                    <i style="color: #AA4A44;" class="fas fa-sign-out-alt"></i>
+                    <span style="color: #AA4A44;" class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <a href="#" class="nav-link">Categories</a>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class='bx bx-search-alt-2'></i></button>
+                </div>
+            </form>
+            <a href="#" class="notification" id="notification-btn">
+                <i class='bx bxs-bell'></i>
+                <span class="num"></span>
+            </a>
+            <a href="#" class="profile" id="profile-btn">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </nav>
+
+        <main>
+            <div class="head-title" style="margin-bottom: 30px;">
+                <div class="left">
+                    <h1>Generate Mock Exam</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="student_dashboard.html">Dashboard</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a href="student_practice.html">Practice Tools</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="#">Mock Exam Generator</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="containerrr">
+                <div class="data exam">
+                    <div class="page">
+                        <h1>Test Generator</h1>
+                    </div>
+                    <div class="subject-list" id="subjectList">
+                        <button class="subject-button" id="openExamGeneratorBtn">Open Exam Generator</button>
+                        <button class="subject-button" id="openNotesBtn">Open Notes</button>
+                    </div>
+                </div>
+    
+                <div class="data">
+                    <div class="page">
+                        <h1>Guidelines for Using the Exam Generator</h1>
+                    </div>
+                    <div class="subject-list" id="subjectList">
+                        <p>The Exam Generator on our website allows users to create customized exams based on their notes. Please follow the steps below to ensure a smooth experience:</p>
+                        <br>
+                        <h4>1. Accessing the Exam Generator</h4>
+                        <p>- Click the "Open Generator Exam" button to launch the exam generator website in a new window.</p>
+                        <p>- This will redirect you to the external platform that generates exam questions based on the provided text.</p>
+    
+                        <h4>2. Preparing Your Notes</h4>
+                        <p>- Before opening the generator, we recommend clicking the "Open Notes" button.</p>
+                        <p>- This will give you access to your saved notes, allowing you to copy the relevant content.</p>
+    
+                        <h4>3. Generating the Exam</h4>
+                        <p>- Copy the desired notes content from the notes section.</p>
+                        <p>- Paste the copied text into the exam generator website in the appropriate field.</p>
+                        <p>- Follow the instructions on the generator website to create your exam.</p>
+    
+                        <h4>4. Finalizing Your Exam</h4>
+                        <p>- Review the generated exam to ensure accuracy and relevance.</p>
+                        <p>- Save or print the exam as needed for study or assessment purposes.</p>
+    
+                        <br>
+                        <h4>Credits</h4>
+                        <p>- This feature utilizes the MagicForm platform to provide an efficient way of converting notes into exam questions. We acknowledge and give credit to the respective developers of the MagicForm platform.</p>
+                    </div>
+                </div>
+            </div>
+            
+                
+            
+
+    <!-- Notification Modal -->
+    <div id="notif-modal" class="notif">
+        <div class="notif-content">
+            <div class="close-button">
+            	<img src="img/back-button.png">
+        	</div>
+            <h2>Notifications</h2>
+            
+            <!-- Study Reminders Section -->
+            <h3>Study Reminders</h3>
+            <ul id="study-reminders">
+                <!-- Study reminders will be dynamically added here -->
+            </ul>
+
+            <!-- Exam Updates Section -->
+            <h3>Exam Updates</h3>
+            <ul id="exam-updates">
+                <!-- Exam updates will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+        
+     <!-- Profile Modal -->
+<div class="container" id="profile-popup">
+    <div class="box form-box" id="popup">
+        <div class="close-button">
+            <img src="img/back-button.png">
+        </div>
+        <header>PROFILE</header>
+        <div class="profile-info">
+            <div class="field">
+                <label for="userfullname">Full Name</label>
+                <p id="userfullname">Loading...</p>
+            </div>
+            <div class="field">
+                <label for="username">Username</label>
+                <p id="username">Loading...</p>
+            </div>
+            <div class="field">
+                <label for="useremail">Email</label>
+                <p id="useremail">Loading...</p>
+            </div>
+            <div class="field">
+                <label for="userphone">Phone Number</label>
+                <p id="userphone">Loading...</p>
+            </div>
+        </div>
+        <div class="field">
+            <button class="fbtn" id="edit-profile-btn">Edit Profile</button>
+        </div>
+    </div>
+</div>
+                
+                
+	<!-- Popup Modal -->
+    <div id="examModal" class="modal">
+        <div class="modal-content">
+            <button class="close" onclick="closePdfViewer()" style="margin-top:0; margin-right:0; position: absolute; top: 0; right: 0; z-index: 1001; background: none; border: none; padding: 10px; cursor: pointer;">
+				<img src="img/close24px.png">
+            </button>
+            <h2>Generate Exam</h2>
+            <p>"This feature utilizes the MagicForm platform to generate exams. Credit to MagicForm for their powerful exam generation tool."</p>
+            <iframe id="pdfFrame" src=""></iframe> <!-- PDF will be displayed here -->
+        </div>
+    </div>
+                
+	<div id="notesModal" class="modal">
+    	<div class="modal-content">
+        	<button class="close" onclick="closeNotesModal()" style="margin-top:0; margin-right:0; position: absolute; top: 0; right: 0; z-index: 1001; background: none; border: none; padding: 10px; cursor: pointer;">
+            	<img src="img/close24px.png">
+        	</button>
+        	<h2>Notes</h2>
+        	<p>This is the notes section. Copy your desired notes.</p>
+        	<!-- Add your notes content or iframe here -->
+            <iframe src="copy_notes.html" width="100%" height="700px" style="border: 1px solid transparent; border-radius: 30px; top:0;"></iframe>
+            </div>
+	</div>
+
+    <script src="notif.js"></script>
+    <script src="fetch_profile.js"></script>
+                
+	<script>
+        // Get references to the modals, buttons, and close buttons
+        const examModal = document.getElementById('examModal');
+        const notesModal = document.getElementById('notesModal');
+        const openExamBtn = document.getElementById('openExamGeneratorBtn');
+        const openNotesBtn = document.getElementById('openNotesBtn');
+        const closeExamBtn = document.querySelector('#examModal .close');
+        const closeNotesBtn = document.querySelector('#notesModal .close');
+
+        // Open the exam modal when the "Open Exam Generator" button is clicked
+        openExamBtn.addEventListener('click', function () {
+            const pdfUrl = "https://www.magicform.app/tools?tool=topic-to-quiz"; // Replace with your dynamic URL logic
+            document.getElementById('pdfFrame').src = pdfUrl; // Load the PDF in the iframe
+            examModal.style.display = 'block'; // Show the exam modal
+        });
+
+        // Open the notes modal when the "Open Notes" button is clicked
+        openNotesBtn.addEventListener('click', function () {
+            notesModal.style.display = 'block'; // Show the notes modal
+        });
+
+        // Close the exam modal when the close button is clicked
+        closeExamBtn.addEventListener('click', function () {
+            examModal.style.display = 'none'; // Hide the exam modal
+        });
+
+        // Close the notes modal when the close button is clicked
+        closeNotesBtn.addEventListener('click', function () {
+            notesModal.style.display = 'none'; // Hide the notes modal
+        });
+
+        // Close the modals when clicking outside of them
+        window.addEventListener('click', function (event) {
+            if (event.target === examModal) {
+                examModal.style.display = 'none'; // Hide the exam modal
+            }
+            if (event.target === notesModal) {
+                notesModal.style.display = 'none'; // Hide the notes modal
+            }
+        });
+    </script>
+</body>
+</html>

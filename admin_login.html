@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Admin Login</title>
+</head>
+<body>
+
+    <div class="home" id="home">
+        <div class="navbar">
+            <a class="logo" href="index.html"><img src="img/logo.jpg" alt=""></a>
+            <ul class="navbar-list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><button type="button" class="lbtn" id="popup-button">ADMIN LOGIN</button></li>
+            </ul>
+
+            <div class="navbar-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="main-cont">
+        <div class="front-text">
+            <h1>CFE Reviewer for CMA Students</h1>
+            <p>Comprehensive CFE Reviewer tailored for aspiring CMA students! Designed to simplify complex topics,our reviewer provides focused content, practice questions, and key concepts to help you master the Certified Management Accountant (CMA) exam. Achieve your CMA goals with confidence!</p>
+    
+            <div>
+                <button class="btn">Get Started</button>
+                <button class="btnn">Learn More</button>
+            </div>
+        </div>
+    
+        <div class="front-img">
+            <img src="img/front-img.jpg" alt="">
+        </div>
+    </div>
+
+
+    <div class="low-cont">
+        <h1>Our User Feedback</h1>
+        <p>We received 99% positive feedback from our users, highlighting their satisfaction
+            with the system's performance and ease of use.</p>
+
+        <div>
+            <ul class="fb-container">
+                <li class="fb1">
+                    <i class="fas fa-user-circle"></i>
+                    <h3> Trisha Motil</h3>
+                    <p><br> "The website is very easy to navigate, and everything loads quickly!"</p>
+                </li>
+            </ul>
+
+            <ul class="fb-container">
+                <li class="fb1">
+                    <i class="fas fa-user-circle"></i>
+                    <h3> Coleen Faye</h3>
+                    <p><br> "I love the clean design and how simple it is to find what I need."</p>
+                </li>
+            </ul>
+
+            <ul class="fb-container">
+                <li class="fb1">
+                    <i class="fas fa-user-circle"></i>
+                    <h3> Trina Motil</h3>
+                    <p><br> "Great experience overall, but adding more filtering options would be helpful."</p>
+                </li>
+            </ul>
+
+            <ul class="fb-container">
+                <li class="fb1">
+                    <i class="fas fa-user-circle"></i>
+                    <h3> Luna Valeria</h3>
+                    <p><br> "The website is very easy to navigate, and everything loads quickly!"</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+
+    <footer class="footer-distributed">
+        <div class="footer-left">
+            <img src="img/flogo.png" style="width:350px; height:auto;">
+
+            <p class="footer-links">
+                <a href="index.html">Home</a>
+                |
+                <a href="contact.html">Contact</a>
+                |
+                <a href="about.html">About Us</a>
+            </p>
+
+            <p class="footer-company-name">Copyright © 2025 CFE Reviewer Team. All rights reserved.</p>
+        </div>
+
+        <div class="footer-center">
+            <div>
+                <i class="fas fa-users"></i>
+                <p>CFE Reviewer Team</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+63 992 673 1512</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="">cfereviewerteam@phinmaed.com</a></p>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>About CFE Reviewer</span>
+                OUR MISSION IS TO MAKE CFE REVIEW AND EXAM EASIER THROUGH OUR SYSTEM. <br> CFE Reviewer Team has provided quality reviewer to underserved learnings.
+            </p>
+            <div class="footer-icons">
+                <a href="https://www.facebook.com/phinmaau/"><i class="fab fa-facebook-square"></i></a>
+                <a href="https://x.com/phinmaau?mx=2"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/phinmaau/"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/user/phinmaed"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    
+
+
+
+
+
+
+
+
+
+
+<!--------------------------Popups------------------------------------------------------------------->
+<div class="container" id="login-popup" style="display:none;">
+    <div class="box form-box">
+        <div class="close-button" onclick="closeLogin()" hidden>
+            <img src="img/back-button.png" alt="Close">
+        </div>
+        <header>ADMIN LOGIN</header>
+        <form id="login-form">
+            <div class="field input">
+                <label for="admin-email">Email</label>
+                <input type="email" id="admin-email" name="useremail" placeholder="Enter admin email" required>
+            </div>
+            
+            <div class="field input">
+                <label for="admin-password">Password</label>
+                <input type="password" id="admin-password" name="userpassword" placeholder="Enter password" required>
+            </div>
+            
+            <div class="field">
+                <button type="submit" class="fbtn">LOGIN</button>
+            </div>
+            <div class="error-message" id="login-error-msg"></div>
+            <input type="hidden" name="usertype" value="Admin">
+        </form>
+    </div>
+</div>
+
+
+
+ <div class="container" id="signup-popup">
+    <div class="box form-box" id="popup">
+        <div class="close-button" onclick="closeSignup()">
+            <img src="img/back-button.png">
+        </div>
+        <header>CREATE ACCOUNT</header>
+        <form id="register-form">
+
+            <div class="field input">
+                <label for="name">Full Name</label>
+                <input type="text" name="userfullname" id="userfullname" placeholder="Enter your full name" autocomplete="off" required>
+            </div> 
+            
+            <div class="field input">
+                <label for="useremail">Email</label>
+                <input type="email" name="useremail" id="useremail" placeholder="Enter your email" autocomplete="off" required>
+            </div> 
+
+            <div class="field input">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" placeholder="Enter your username" autocomplete="off" required>
+            </div> 
+
+            <div class="field input">
+                <label for="number">Mobile Number</label>
+                <input type="text" name="userphone" id="userphone" placeholder="Enter your mobile number" autocomplete="off" required>
+            </div> 
+
+            <div class="field input">
+                <label for="userpassword">Create your password</label>
+                <input type="password" name="userpassword" id="userpassword" placeholder="Enter your password" autocomplete="off" required>
+            </div>
+
+            <div class="field input">
+                <label for="userpassword1">Re-type your password</label>
+                <input type="password" name="userpassword1" id="userpassword1" placeholder="Re-type your password" autocomplete="off" required>
+            </div>
+
+            
+
+            <div class="field">
+                <input type="submit" class="fbtn" name="submit" value="Register" required>
+            </div>
+            <div class="links">
+                Already have an account? <a href="#" onclick="openLogin()">SIGN UP NOW</a>
+            </div>
+        </form>
+    </div>
+ </div>
+
+
+<!--------------------------Popups------------------------------------------------------------------->
+
+
+
+
+
+
+
+<script src="script.js"></script>
+
+<script>
+// DOM Elements
+const loginForm = document.getElementById('login-form');
+const registerForm = document.getElementById('register-form');
+const loginPopup = document.getElementById('login-popup');
+const registerPopup = document.getElementById('signup-popup');
+const loginBtn = document.getElementById('popup-button');
+
+// Event Listeners
+loginBtn.addEventListener('click', openLogin);
+loginForm.addEventListener('submit', handleAdminLogin);
+registerForm.addEventListener('submit', handleAdminRegistration);
+
+// Popup Functions
+function openLogin() {
+    loginPopup.style.display = 'flex';
+    registerPopup.style.display = 'none';
+}
+
+function openSignup() {
+    registerPopup.style.display = 'flex';
+    loginPopup.style.display = 'none';
+}
+
+function closeLogin() {
+    loginPopup.style.display = 'none';
+}
+
+function closeSignup() {
+    registerPopup.style.display = 'none';
+}
+
+// Admin Login Handler
+async function handleAdminLogin(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('admin-email').value; // Fixed ID
+    const password = document.getElementById('admin-password').value; // Fixed ID
+    const errorMsg = document.getElementById('login-error-msg');
+    
+    try {
+        const response = await fetch('admin_login.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                useremail: email,
+                userpassword: password,
+                usertype: 'Admin'
+            })
+        });
+        
+        // First check if response is OK
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Then try to parse as JSON
+        const data = await response.json();
+        
+        if (data.success === 1) {
+            window.location.href = data.redirect || "admin_user_manage.html";
+        } else {
+            showError('login-error-msg', data.message || 'Login failed');
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        showError('login-error-msg', 'Failed to process login. Please try again.');
+        
+        // Additional debug - log the actual response
+        const response = await fetch('admin_login.php', { /* same params */ });
+        const text = await response.text();
+        console.log("Raw server response:", text);
+    }
+}
+
+// Admin Registration Handler
+async function handleAdminRegistration(e) {
+    e.preventDefault();
+    
+    const formData = {
+        userfullname: document.getElementById('userfullname').value,
+        useremail: document.getElementById('useremail').value,
+        username: document.getElementById('username').value,
+        userphone: document.getElementById('userphone').value,
+        userpassword: document.getElementById('userpassword').value,
+        userpassword1: document.getElementById('userpassword1').value,
+        usertype: 'Admin' // Force Admin type
+    };
+    
+    // Client-side validation
+    if (formData.userpassword !== formData.userpassword1) {
+        showError('register-error-msg', 'Passwords do not match!');
+        return;
+    }
+    
+    try {
+        const response = await fetch('admin_register.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success === "1") {
+            alert('Admin registration successful! Please login.');
+            closeSignup();
+            openLogin();
+        } else {
+            showError('register-error-msg', data.message || 'Admin registration failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showError('register-error-msg', 'Network error. Please try again.');
+    }
+}
+
+// Helper function to show error messages
+function showError(elementId, message) {
+    const errorElement = document.getElementById(elementId);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+}
+
+// Close popups when clicking outside
+document.addEventListener('click', (e) => {
+    if (e.target === loginPopup) closeLogin();
+    if (e.target === registerPopup) closeSignup();
+});
+</script>
+
+</body>
+</html>

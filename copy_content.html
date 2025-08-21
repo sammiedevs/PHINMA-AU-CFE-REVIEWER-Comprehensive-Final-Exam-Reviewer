@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Reviewer Content</title>
+</head>
+<style>
+    body {
+        background: #eee;
+    }
+    #subjectDetails{
+    	display: block;
+    }
+    .subject-details {
+        width: 100%; /* Make the list take up full width */
+        display: flex;
+        flex-direction: column; /* Stack items vertically */
+        gap: 5px; /* Space between items */
+        padding: 10px;
+        display: block;
+    }
+
+    .subject-button {
+    display: flex; /* Use flex to align items in a row */
+    justify-content: space-between; /* Pushes name left, menu right */
+    align-items: center; /* Aligns vertically */
+    width: 100%;
+    background: #f0f0f0;
+    padding: 15px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 5px;
+}
+
+    .subject-button:hover {
+        background: #161041;
+        transform: translateY(-2px); /* Slight lift on hover */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+    }
+    .subject-button:hover .subject-name {
+        color: white; /* Change text color to white on hover */
+    }
+    .subject-button:hover .menu-button{
+            color:white;
+    }
+
+    .subject-button .subject-name {
+        font-size: 18px;
+        font-weight: 500;
+        color: #161041; /* Dark blue for subject name */
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between icon and text */
+    }
+
+    .subject-button .subject-name i {
+        font-size: 20px; /* Icon size */
+        color: #F59D37; /* Icon color */
+    }
+    
+    
+
+    .save-button {
+        position: relative;
+        width: 150px;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        border: 1px solid #34974d;
+        background-color: #3aa856;
+        overflow: hidden; /* Ensure the icon doesn't overflow */
+        padding-left: 10px; /* Add left padding to align text */
+        padding-right: 10px;
+    }
+
+    .save-button, .button__icon, .button__text {
+        transition: all 0.3s;
+    }
+
+    .save-button .button__text {
+        color: #fff;
+        font-weight: 500;
+        text-align: left; /* Align text to the left */
+        flex-grow: 1; /* Allow text to take up remaining space */
+    }
+
+    .save-button .button__icon {
+        position: absolute;
+        right: 0; /* Position icon on the right */
+        height: 100%;
+        width: 39px;
+        padding-right: 5px;
+        background-color: #34974d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(calc(100% - 30px)); /* Partially show the icon */
+    }
+
+    .save-button .svg {
+        width: 30px;
+        stroke: #fff;
+        padding-right: 10px;
+    }
+
+    .save-button:hover {
+        background: #34974d;
+    }
+
+    .save-button:hover .button__text {
+        color: transparent; /* Hide text on hover */
+    }
+
+    .save-button:hover .button__icon {
+        width: 100%; /* Expand icon to full width on hover */
+        transform: translateX(0); /* Move icon to the left */
+    }
+
+    .save-button:active .button__icon {
+        background-color: #2e8644; /* Change icon background on active */
+    }
+
+    .save-button:active {
+        border: 1px solid #2e8644; /* Change border color on active */
+    }
+
+    .data {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin: 20px 50px;
+    }
+
+    .page {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #F59D37;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    .page button {
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .page h1 {
+        font-size: 35px;
+        color: #161041;
+        margin: 0;
+    }
+    a{
+    	text-decoration:none;
+    }
+    .no-reviewers {
+    color: gray;
+    text-align: center;
+    font-style: italic;
+    font-size: 16px;
+    margin-top: 10px;
+    }
+    .subject-container {
+        display: block; /* Ensures subjects are grouped */
+    }
+    .subject-container:empty {
+        display: none;
+    }
+            
+    /* Menu container to position the dropdown */
+    .menu-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Three-dots button */
+    .menu-button {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 5px;
+        margin-left: 10px;
+        color: #161041;
+    }
+
+    /* Dropdown menu */
+    .menu-dropdown {
+        display: none;
+        position: absolute;
+        top: 30px;
+        right: 0;
+        background: white;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        z-index: 10;
+        min-width: 100px;
+    }
+
+    /* Buttons inside the dropdown */
+    .menu-dropdown button {
+        width: 100%;
+        padding: 8px 12px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        text-align: left;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    .menu-dropdown button:hover {
+        background: #F59D37;
+        color: white;
+    }
+    .menu-dropdown button.del:hover{
+        background:#AA4A44;
+    }
+
+
+
+
+    .content-editor {
+        margin-top: 20px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .toolbar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        flex-wrap: wrap; /* Allow buttons to wrap to the next line */
+    }
+
+    .toolbar button {
+        background: #f0f0f0;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .toolbar button:hover {
+        background: #ddd;
+    }
+
+    .content-area {
+        width: 100%;
+        height: 600px; /* Increase the height */
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        line-height: 1.5;
+        resize: vertical; /* Allow vertical resizing */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .highlight {
+        background-color: yellow; /* Default highlight color */
+    }
+
+    /* Styles for formatting options */
+    .title {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .heading {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .subheading {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .body {
+        font-size: 16px;
+    }
+
+    
+
+
+
+
+</style>
+<body>
+        
+        	<a href="copy_notes.html">
+				<img style="margin-top: 20px; margin-left: 20px; cursor: pointer;" src="img/back.png">
+        	</a>
+                
+                
+            <div class="data">
+            	<div class="page">
+                <h2 class="subjectName">Loading subject...</h2>
+    			<h1 class="titleName">Loading title...</h1>
+
+                <button class="save-button">
+                    <span class="button__text">Save Reviewer</span>
+                    <span class="button__icon" style="color:white;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                    </span>
+                </button>
+
+            </div>
+            
+            <div class="content-editor">
+                <div class="toolbar">
+                    <!-- Formatting Tools -->
+                    <button onclick="formatText('title')">Title</button>
+                    <button onclick="formatText('heading')">Heading</button>
+                    <button onclick="formatText('subheading')">Subheading</button>
+                    <button onclick="formatText('body')">Body</button>
+                    <button onclick="toggleFormat('bold')"><b>B</b></button>
+                    <button onclick="toggleFormat('italic')"><i>I</i></button>
+                    <button onclick="toggleFormat('underline')"><u>U</u></button>
+                    <!-- Highlight Tools -->
+                    <button onclick="highlightText('yellow')">
+                        <img src="img/yellow_highlighter.png" alt="">
+                    </button>
+                    <button onclick="highlightText('#ffcccb')">
+                        <img src="img/pink_highlighter.png" alt="">
+                    </button>
+                    <button onclick="highlightText('#90EE90')">
+                        <img src="img/green_highlighter.png" alt="">
+                    </button>
+                    <button onclick="removeHighlight()">Remove Highlight</button>
+                </div>
+                <div id="content-area" class="content-area" contenteditable="true">
+                    <!-- Users can type their notes here -->
+                </div>
+            </div>
+            
+        </div>
+            
+        </main>
+    </section>
+
+    <!-- Notification Modal -->
+    <div id="notif-modal" class="notif">
+        <div class="notif-content">
+            <div class="close-button">
+            	<img src="img/back-button.png">
+        	</div>
+            <h2>Notifications</h2>
+            
+            <!-- Study Reminders Section -->
+            <h3>Study Reminders</h3>
+            <ul id="study-reminders">
+                <!-- Study reminders will be dynamically added here -->
+            </ul>
+
+            <!-- Exam Updates Section -->
+            <h3>Exam Updates</h3>
+            <ul id="exam-updates">
+                <!-- Exam updates will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+        
+     <!-- Profile Modal -->
+<div class="container" id="profile-popup">
+    <div class="box form-box" id="popup">
+        <div class="close-button">
+            <img src="img/back-button.png">
+        </div>
+        <header>PROFILE</header>
+        <div class="profile-info">
+            <div class="field">
+                <label for="userfullname">Full Name</label>
+                <p id="userfullname">Loading...</p>
+            </div>
+            <div class="field">
+                <label for="username">Username</label>
+                <p id="username">Loading...</p>
+            </div>
+            <div class="field">
+                <label for="useremail">Email</label>
+                <p id="useremail">Loading...</p>
+            </div>
+            <div class="field">
+                <label for="userphone">Phone Number</label>
+                <p id="userphone">Loading...</p>
+            </div>
+        </div>
+        <div class="field">
+            <button class="fbtn" id="edit-profile-btn">Edit Profile</button>
+        </div>
+    </div>
+</div>
+        
+
+    <script src="notif.js"></script>
+    <script src="fetch_profile.js"></script>
+
+    <script>
+        // Reset text to body style
+        function resetStyles() {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const span = document.createElement("span");
+                span.className = "body"; // Apply the body class
+                span.style.fontWeight = "normal"; // Reset bold
+                span.style.fontStyle = "normal"; // Reset italic
+                span.style.textDecoration = "none"; // Reset underline
+                range.surroundContents(span);
+            }
+        }
+
+        // Format text functionality
+        function formatText(format) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const span = document.createElement("span");
+
+                switch (format) {
+                    case "title":
+                        span.className = "title";
+                        break;
+                    case "heading":
+                        span.className = "heading";
+                        break;
+                    case "subheading":
+                        span.className = "subheading";
+                        break;
+                    case "body":
+                        resetStyles(); // Reset styles for body text
+                        return; // Exit the function after resetting styles
+                }
+
+                range.surroundContents(span);
+            }
+        }
+
+        // Toggle formatting functionality
+        function toggleFormat(format) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const span = document.createElement("span");
+
+                // Check if the selected text already has the style
+                let isAlreadyFormatted = false;
+                if (range.commonAncestorContainer.parentNode) {
+                    const parent = range.commonAncestorContainer.parentNode;
+                    switch (format) {
+                        case "bold":
+                            isAlreadyFormatted = parent.style.fontWeight === "bold";
+                            break;
+                        case "italic":
+                            isAlreadyFormatted = parent.style.fontStyle === "italic";
+                            break;
+                        case "underline":
+                            isAlreadyFormatted = parent.style.textDecoration === "underline";
+                            break;
+                    }
+                }
+
+                if (isAlreadyFormatted) {
+                    // Remove the formatting
+                    const parent = range.commonAncestorContainer.parentNode;
+                    while (parent.firstChild) {
+                        parent.parentNode.insertBefore(parent.firstChild, parent);
+                    }
+                    parent.parentNode.removeChild(parent);
+                } else {
+                    // Apply the formatting
+                    switch (format) {
+                        case "bold":
+                            span.style.fontWeight = "bold";
+                            break;
+                        case "italic":
+                            span.style.fontStyle = "italic";
+                            break;
+                        case "underline":
+                            span.style.textDecoration = "underline";
+                            break;
+                    }
+                    range.surroundContents(span);
+                }
+            }
+        }
+
+        // Highlight text functionality
+        function highlightText(color) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const span = document.createElement("span");
+                span.className = "highlight";
+                span.style.backgroundColor = color;
+                range.surroundContents(span);
+            }
+        }
+
+        // Remove highlight functionality
+        function removeHighlight() {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                let node = range.commonAncestorContainer;
+
+                // Traverse up to find the nearest highlight element
+                while (node && node.nodeType === Node.TEXT_NODE) {
+                    node = node.parentNode;
+                }
+
+                if (node && node.nodeType === Node.ELEMENT_NODE && node.classList.contains("highlight")) {
+                    const parent = node.parentNode;
+                    while (node.firstChild) {
+                        parent.insertBefore(node.firstChild, node);
+                    }
+                    parent.removeChild(node);
+                }
+            }
+        }
+    </script>
+        
+        
+	<script>
+        // Function to update the "Reviewer" link
+        function updateReviewerLink() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            if (id) {
+                const reviewerLink = document.getElementById('reviewer-link');
+                if (reviewerLink) {
+                    reviewerLink.href = `subject_details.html?id=${id}`;
+                }
+            }
+        }
+
+        // Function to fetch and display the title and subject
+        function fetchTitleAndSubject() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            if (id) {
+                const subjectNameElement = document.querySelector('.subjectName');
+                const titleNameElement = document.querySelector('.titleName');
+
+                if (subjectNameElement && titleNameElement) {
+                    fetch(`content.php?id=${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                subjectNameElement.textContent = data.subject;
+                                titleNameElement.textContent = data.title;
+                            } else {
+                                console.error('Failed to fetch details:', data.message || 'No message provided');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching details:', error);
+                        });
+                }
+            }
+        }
+
+        // Call the functions
+        updateReviewerLink();
+        fetchTitleAndSubject();
+    </script>
+        
+        
+    <script>
+            
+        // Fetch subject, title, and content by ID
+        async function fetchReviewerDetails(id) {
+            try {
+                const response = await fetch(`content.php?id=${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update the displayed subject and title
+                    document.querySelector('.subjectName').textContent = data.subject;
+                    document.querySelector('.titleName').textContent = data.title;
+                    // Update the content-area with the fetched content
+                    document.getElementById('content-area').innerHTML = data.content;
+                } else {
+                    console.error('Failed to fetch details:', data.message || 'No message provided');
+                }
+            } catch (error) {
+                console.error('Error fetching details:', error);
+            }
+        }
+
+        // Call the function with the ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const reviewerId = urlParams.get('id');
+        if (reviewerId) {
+            fetchReviewerDetails(reviewerId);
+        }
+
+        // Save content to the database
+        async function saveReviewer() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id'); // Get the ID from the URL
+            const content = document.getElementById('content-area').innerHTML; // Get the content
+
+            try {
+                const saveResponse = await fetch('content.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id, content }), // Include the ID and content in the request
+                });
+
+                const rawResponse = await saveResponse.text();
+                console.log('Raw Response:', rawResponse);
+
+                try {
+                    const result = JSON.parse(rawResponse);
+                    if (result.status === 'success') {
+                        alert('Reviewer updated successfully!');
+                    } else {
+                        alert('Failed to update reviewer: ' + result.message);
+                    }
+                } catch (jsonError) {
+                    console.error('Failed to parse JSON:', jsonError);
+                    console.error('Raw Response:', rawResponse);
+                    alert('Failed to parse server response. Check console for details.');
+                }
+            } catch (error) {
+                console.error('Error updating reviewer:', error);
+                alert('An error occurred while updating the reviewer. Check console for details.');
+            }
+        }
+
+        // Attach the save function to the save button
+        document.querySelector('.save-button').addEventListener('click', saveReviewer);
+        
+            
+        // Fetch content for the selected title
+        async function fetchContentByTitle(title) {
+            try {
+                const response = await fetch(`content.php?title=${encodeURIComponent(title)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update the content-area with the fetched content
+                    document.getElementById('content-area').innerHTML = data.content;
+                } else {
+                    console.error('Failed to fetch content:', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching content:', error);
+            }
+        }
+
+        // Example: Attach this function to your title buttons
+        document.querySelectorAll('.title-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const title = button.textContent; // Get the title from the button
+                document.querySelector('.titleName').textContent = title; // Update the displayed title
+                fetchContentByTitle(title); // Fetch and display the content
+            });
+        });
+            
+        // Fetch subject and title details
+        async function fetchSubjectAndTitle(title) {
+            try {
+                const response = await fetch(`content.php?title=${encodeURIComponent(title)}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update the displayed subject and title
+                    document.querySelector('.subjectName').textContent = data.subject;
+                    document.querySelector('.titleName').textContent = data.title;
+                    // Update the content-area with the fetched content
+                    document.getElementById('content-area').innerHTML = data.content;
+                } else {
+                    console.error('Failed to fetch details:', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching details:', error);
+            }
+        }
+
+        // Example: Attach this function to your title buttons
+        document.querySelectorAll('.title-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const title = button.textContent; // Get the title from the button
+                fetchSubjectAndTitle(title); // Fetch and display the subject, title, and content
+            });
+        });
+    </script>
+
+        
+    
+</body>
+</html>

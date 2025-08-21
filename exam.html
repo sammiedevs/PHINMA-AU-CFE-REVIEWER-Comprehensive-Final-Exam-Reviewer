@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Exam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question p {
+            font-weight: bold;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+        }
+        #submit-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #34974d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #submit-btn:hover {
+            background-color: #2e8644;
+        }
+        #score {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generated Exam</h1>
+    <div id="questions"></div>
+    <button id="submit-btn">Submit Answers</button>
+    <div id="score"></div>
+
+    <script>
+        // Function to extract URL parameters
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Function to render the exam questions
+        function renderExam() {
+            const examData = getQueryParam('exam');
+
+            if (!examData) {
+                document.getElementById('questions').innerHTML = "<p>No exam data found.</p>";
+                return;
+            }
+
+            // Decode and parse the exam data
+            const questions = JSON.parse(decodeURIComponent(examData));
+
+            const questionsDiv = document.getElementById('questions');
+            questionsDiv.innerHTML = '';
+
+            if (!questions || questions.length === 0) {
+                questionsDiv.innerHTML = "<p>No questions generated.</p>";
+                return;
+            }
+
+            // Render each question
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <p><strong>Question ${index + 1}:</strong> ${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((opt, optIndex) => `
+                            <label>
+                                <input type="radio" name="question${index}" value="${opt}">
+                                ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                    <hr>
+                `;
+                questionsDiv.appendChild(questionDiv);
+            });
+        }
+
+        // Function to calculate the score
+        function calculateScore() {
+            const questions = JSON.parse(decodeURIComponent(getQueryParam('exam')));
+            let score = 0;
+
+            questions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+                if (selectedOption && selectedOption.value === q.correctAnswer) {
+                    score++;
+                }
+            });
+
+            return score;
+        }
+
+        // Render the exam when the page loads
+        renderExam();
+
+        // Add event listener to the submit button
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            const score = calculateScore();
+            const totalQuestions = JSON.parse(decodeURIComponent(getQueryParam('exam'))).length;
+            document.getElementById('score').innerHTML = `Your score: ${score} out of ${totalQuestions}`;
+        });
+    </script>
+</body>
+</html>

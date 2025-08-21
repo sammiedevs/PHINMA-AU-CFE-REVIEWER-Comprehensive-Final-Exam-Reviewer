@@ -1,0 +1,927 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Comprehensive Notes</title>
+</head>
+<style>
+        body {
+            background: #eee;
+        }
+        #subjectList{
+                display: block;
+        }
+        /* Subject List Styles */
+        .subject-list {
+            width: 100%; /* Make the list take up full width */
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            gap: 5px; /* Space between items */
+            padding: 10px;
+        }
+
+        .subject-button {
+            margin-top: 5px;
+            background: #f0f0f0;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left; /* Align text to the left */
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            justify-content: space-between; /* Space between subject name and actions */
+            align-items: center;
+            width: 100%; /* Make each button take up full width */
+        }
+
+        .subject-button:hover {
+            background: #161041;
+            transform: translateY(-2px); /* Slight lift on hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+        }
+        .subject-button:hover .subject-name {
+            color: white; /* Change text color to white on hover */
+        }
+        .subject-button:hover .menu-button {
+            color: white;
+        }
+
+
+        .subject-button .subject-name {
+            font-size: 18px;
+            font-weight: 500;
+            color: #161041; /* Dark blue for subject name */
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between icon and text */
+        }
+
+        .subject-button .subject-name i{
+            font-size: 20px; /* Icon size */
+            color: #F59D37; /* Icon color */
+        }
+
+        .add-subject-button {
+            position: relative;
+            width: 150px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border: 1px solid #34974d;
+            background-color: #3aa856;
+            overflow: hidden; /* Ensure the icon doesn't overflow */
+            padding-left: 10px; /* Add left padding to align text */
+            padding-right: 10px;
+        }
+
+        .add-subject-button, .button__icon, .button__text {
+            transition: all 0.3s;
+        }
+
+        .add-subject-button .button__text {
+            color: #fff;
+            font-weight: 600;
+            text-align: left; /* Align text to the left */
+            flex-grow: 1; /* Allow text to take up remaining space */
+        }
+
+        .add-subject-button .button__icon {
+            position: absolute;
+            right: 0; /* Position icon on the right */
+            height: 100%;
+            width: 39px;
+            background-color: #34974d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(calc(100% - 30px)); /* Partially show the icon */
+        }
+
+        .add-subject-button .svg {
+            width: 30px;
+            stroke: #fff;
+            padding-right: 10px;
+        }
+
+        .add-subject-button:hover {
+            background: #34974d;
+        }
+
+        .add-subject-button:hover .button__text {
+            color: transparent; /* Hide text on hover */
+        }
+
+        .add-subject-button:hover .button__icon {
+            width: 100%; /* Expand icon to full width on hover */
+            transform: translateX(0); /* Move icon to the left */
+        }
+
+        .add-subject-button:active .button__icon {
+            background-color: #2e8644; /* Change icon background on active */
+        }
+
+        .add-subject-button:active {
+            border: 1px solid #2e8644; /* Change border color on active */
+        }
+
+        .data {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .page {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #F59D37;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+        .page button {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .page h1 {
+            font-size: 35px;
+            color: #161041;
+            margin: 0;
+        }
+        a {
+            text-decoration: none;
+        }
+        .no-reviewers {
+            color: gray;
+            text-align: center;
+            font-style: italic;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .subject-container {
+            display: block; /* Ensures subjects are grouped */
+        }
+        .subject-container:empty {
+            display: none;
+        }
+
+        #addSubjectModal {
+            display: none; /* Hidden by default */
+        }
+       	/* Menu container to position the dropdown */
+.menu-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Three-dots button */
+.menu-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    margin-left: 10px;
+    color: #161041;
+}
+
+/* Dropdown menu */
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    z-index: 10;
+    min-width: 100px;
+}
+
+/* Buttons inside the dropdown */
+.menu-dropdown button {
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+.menu-dropdown button:hover {
+    background: #F59D37;
+    color: white;
+}
+.menu-dropdown button.del:hover{
+    background:#AA4A44;
+}
+        /*---------------------Profile Popup-------------------------------*/
+.profile-modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 2000;
+}
+
+.profile-modal-box {
+    background: #FAF9F6;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 25px;
+    border-radius: 20px;
+    box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1),
+                0 32px 64px -48px rgba(0, 0, 0, 0.5);
+    width: 550px;
+    margin: 0px 10px;
+    position: relative;
+}
+
+.profile-modal-box header {
+    font-size: 30px;
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #F8C019;
+    margin-bottom: 10px;
+    color: #161041;
+    background: #F59D37;
+    padding: 3px;
+    border-radius: 50px;
+    padding-left: 30px;
+    color: white;
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: 20px;
+}
+
+.profile-modal-box .field {
+    display: flex;
+    margin-bottom: 10px;
+    flex-direction: column;
+}
+
+.profile-modal-box .fbtn {
+    height: 35px;
+    background: #161041;
+    border: 0;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all .3s;
+    margin-top: 10px;
+    padding: 0px 10px;
+}
+
+.profile-modal-box .fbtn:hover {
+    opacity: 0.9;
+    background: #050672;
+}
+
+.profile-modal-box .close-button img {
+    position: absolute;
+    right: 0;
+    margin: 10px 30px;
+    cursor: pointer;
+    font-size: 25px;
+    transform: transform 0.3s;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    margin-top: -3px;
+    border-radius: 50px;
+}
+
+.profile-modal-box .close-button img:hover {
+    opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .profile-modal-box {
+        width: 90%;
+        padding: 20px 15px;
+    }
+    
+    .profile-modal-box header {
+        font-size: 24px;
+        padding-left: 20px;
+    }
+    
+    .profile-modal-box .close-button img {
+        width: 30px;
+        height: 30px;
+        margin: 5px 15px;
+    }
+}
+
+
+        
+/* Form controls for edit modals */
+.profile-modal-box .form-control {
+    height: 40px;
+    width: 100%;
+    font-size: 16px;
+    padding: 0 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    margin-top: 5px;
+}
+
+/* Password requirements indicator */
+.password-requirements {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Error messages */
+.error-message {
+    color: #AA4A44;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+        
+    </style>
+<body>
+
+    <!-- Sidebar -->
+    <section id="sidebar">
+        <a href="student_dashboard.html" class="brand">
+            <img src="img/logo.jpg">
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="student_dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="student_reviewer.html">
+                    <i class="fas fa-book"></i>
+                    <span class="text">Study Materials</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_practice.html">
+                    <i class="fas fa-tools"></i>
+                    <span class="text">Practice Tools</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_progress.html">
+                    <i class="fas fa-tasks"></i>
+                    <span class="text">Progress Tracking</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_calendar.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="text">Calendar</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_feedback.html">
+                    <i class="fas fa-comments"></i>
+                    <span class="text">Feedback</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu bot">
+            <li>
+                <a href="index.html">
+                    <i style="color: #AA4A44;" class="fas fa-sign-out-alt"></i>
+                    <span style="color: #AA4A44;" class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <a href="#" class="nav-link">Categories</a>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class='bx bx-search-alt-2'></i></button>
+                </div>
+            </form>
+            <a href="#" class="notification" id="notification-btn">
+                <i class='bx bxs-bell'></i>
+                <span class="num"></span>
+            </a>
+            <a href="#" class="profile" id="profile-btn">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </nav>
+
+        <main>
+            <div class="head-title" style="margin-bottom: 30px;">
+                <div class="left">
+                    <h1>Comprehensive Notes Page</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="student_dashboard.html">Dashboard</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a href="student_reviewer.html">Study Materials</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="#">Comprehensive Notes</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="data">
+            	<div class="page">
+                <h1>Subjects</h1>
+
+                <button class="add-subject-button" onclick="openModal()">
+                    <span class="button__text">Add Subject</span>
+                    <span class="button__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg">
+                            <line y2="19" y1="5" x2="12" x1="12"></line>
+                            <line y2="12" y1="12" x2="19" x1="5"></line>
+                        </svg>
+                    </span>
+                </button>
+
+            </div>
+            
+            <div class="subject-list" id="subjectList">
+    			<p class="no-reviewers" style="color:gray;">Loading...</p>
+			</div>
+		</div>
+
+        </main>
+    </section>
+
+
+
+    <!-- Notification Modal -->
+    <div id="notif-modal" class="notif">
+        <div class="notif-content">
+            <div class="close-button">
+            	<img src="img/back-button.png">
+        	</div>
+            <h2>Notifications</h2>
+            
+            <!-- Study Reminders Section -->
+            <h3>Study Reminders</h3>
+            <ul id="study-reminders">
+                <!-- Study reminders will be dynamically added here -->
+            </ul>
+
+            <!-- Exam Updates Section -->
+            <h3>Exam Updates</h3>
+            <ul id="exam-updates">
+                <!-- Exam updates will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+        
+<!-- Profile Modal -->
+<div class="profile-modal-container" id="profile-popup">
+    <div class="profile-modal-box">
+        <div class="close-button">
+            <img src="img/back-button.png">
+        </div>
+        <header>PROFILE</header>
+        <div class="profile-info">
+            <div class="field">
+                <label>Full Name</label>
+                <p id="userfullname">Loading...</p>
+            </div>
+            <div class="field">
+                <label>Username</label>
+                <p id="username">Loading...</p>
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <p id="useremail">Loading...</p>
+            </div>
+            <div class="field">
+                <label>Phone Number</label>
+                <p id="userphone">Loading...</p>
+            </div>
+        </div>
+        <div class="field">
+            <button class="fbtn" id="edit-profile-btn">Edit Profile</button>
+        </div>
+    </div>
+</div>
+        
+<!-- Edit Profile Modal -->
+<div class="profile-modal-container" id="edit-profile-modal">
+    <div class="profile-modal-box">
+        <div class="close-button">
+            <img src="img/back-button.png">
+        </div>
+        <header>EDIT PROFILE</header>
+        <div class="profile-info">
+            <div class="field">
+                <label>Full Name</label>
+                <input type="text" id="edit-fullname" class="form-control">
+            </div>
+            <div class="field">
+                <label>Username</label>
+                <input type="text" id="edit-username" class="form-control">
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="edit-email" class="form-control">
+            </div>
+            <div class="field">
+                <label>Phone Number</label>
+                <input type="tel" id="edit-phone" class="form-control">
+            </div>
+        </div>
+        <div class="field">
+            <button class="fbtn" id="save-profile-btn">Save Changes</button>
+			<button class="fbtn" id="change-password-btn" style="margin-top: 10px;">Change Password</button>
+        </div>
+		<!-- Add this to your edit profile modal -->
+<div id="profile-error" class="error-message" style="color: red; margin: 10px 0; display: none;"></div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="profile-modal-container" id="change-password-modal">
+    <div class="profile-modal-box">
+        <div class="close-button">
+            <img src="img/back-button.png">
+        </div>
+        <header>CHANGE PASSWORD</header>
+        <div class="profile-info">
+            <div class="field">
+                <label>Current Password</label>
+                <input type="password" id="current-password" class="form-control" required>
+            </div>
+            <div class="field">
+                <label>New Password</label>
+                <input type="password" id="new-password" class="form-control" required>
+            </div>
+            <div class="field">
+                <label>Confirm New Password</label>
+                <input type="password" id="confirm-password" class="form-control" required>
+            </div>
+        </div>
+        <div class="field">
+            <button class="fbtn" id="save-password-btn">Update Password</button>
+        </div>
+    </div>
+</div>
+        
+<!-- Modal for Adding Subject -->
+    <div class="container" id="addSubjectModal">
+        <div class="box form-box" id="popup">
+            <div class="close-button" onclick="closeModal()">
+                <img src="img/back-button.png">
+            </div>
+            <header>Add Subject</header>
+            <form id="subject-form">
+                <div class="field input">
+                    <label for="subjectSubject">Subject</label>
+                    <input type="text" name="subject" id="subjectSubject" placeholder="Enter subject here" autocomplete="off" required>
+                </div>
+                <div class="field">
+                    <input type="submit" class="fbtn" name="submit" value="Submit" required>
+                </div>
+            </form>
+        </div>
+    </div>
+        
+<!-- Modal for updating Subject -->
+<div id="updateSubjectModal" class="container" style="display: none;">
+    <div class="box form-box" id="popup">
+        <div class="close-button" onclick="closeUpdateModal()">
+            <img src="img/back-button.png">
+        </div>
+        <header>Update Subject Name</header>
+        <form id="update-subject-form">
+            <div class="field input">
+                <label for="updateSubjectName">Subject Name</label>
+                <input type="text" id="updateSubjectName" placeholder="Enter new subject name" required>
+            </div>
+            <div class="field">
+                <input type="hidden" id="updateSubjectId">
+                <button type="submit" class="fbtn">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <script src="reviewer.js"></script>
+    <script src="notif.js"></script>
+    <script src="fetch_profile.js"></script>
+        
+<script>
+        // Open profile modal
+document.getElementById('profile-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('profile-popup').style.display = 'flex';
+});
+
+// Close ALL modals when clicking close buttons
+document.querySelectorAll('.close-button').forEach(button => {
+    button.addEventListener('click', function() {
+        document.querySelectorAll('.profile-modal-container').forEach(modal => {
+            modal.style.display = 'none';
+        });
+    });
+});
+
+// Close when clicking outside modal content
+document.querySelectorAll('.profile-modal-container').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) { // If clicking the backdrop (not the content)
+            this.style.display = 'none';
+        }
+    });
+});
+            
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Profile Modal Functions
+    const editProfileBtn = document.getElementById('edit-profile-btn');
+    const changePasswordBtn = document.getElementById('change-password-btn');
+    const saveProfileBtn = document.getElementById('save-profile-btn');
+    const savePasswordBtn = document.getElementById('save-password-btn');
+
+    // Only add event listeners if elements exist
+    if (editProfileBtn) {
+        editProfileBtn.addEventListener('click', function() {
+            // Populate edit form with current data
+            document.getElementById('edit-fullname').value = document.getElementById('userfullname').textContent;
+            document.getElementById('edit-username').value = document.getElementById('username').textContent;
+            document.getElementById('edit-email').value = document.getElementById('useremail').textContent;
+            document.getElementById('edit-phone').value = document.getElementById('userphone').textContent;
+            
+            // Show edit modal
+            document.getElementById('profile-popup').style.display = 'none';
+            document.getElementById('edit-profile-modal').style.display = 'flex';
+        });
+    }
+
+    if (changePasswordBtn) {
+        changePasswordBtn.addEventListener('click', function() {
+            // Clear password fields
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+            
+            // Show change password modal
+            document.getElementById('profile-popup').style.display = 'none';
+            document.getElementById('change-password-modal').style.display = 'flex';
+        });
+    }
+
+    // Update the saveProfileBtn click handler
+// Update the saveProfileBtn click handler
+// Update the saveProfileBtn click handler
+if (saveProfileBtn) {
+    saveProfileBtn.addEventListener('click', function() {
+        // Create an object with only changed values
+        const currentData = {
+            userfullname: document.getElementById('userfullname').textContent,
+            username: document.getElementById('username').textContent,
+            useremail: document.getElementById('useremail').textContent,
+            userphone: document.getElementById('userphone').textContent
+        };
+
+        const newData = {
+            userfullname: document.getElementById('edit-fullname').value || currentData.userfullname,
+            username: document.getElementById('edit-username').value || currentData.username,
+            useremail: document.getElementById('edit-email').value || currentData.useremail,
+            userphone: document.getElementById('edit-phone').value || currentData.userphone
+        };
+
+        // Check if anything actually changed
+        let changes = false;
+        for (const key in newData) {
+            if (newData[key] !== currentData[key]) {
+                changes = true;
+                break;
+            }
+        }
+
+        if (!changes) {
+            alert('No changes were made');
+            return;
+        }
+
+        // Show loading state
+        saveProfileBtn.disabled = true;
+        saveProfileBtn.textContent = 'Saving...';
+
+        // AJAX call with changed data only
+        fetch('update_profile.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'update_profile',
+                ...newData
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status) {
+                // Update displayed values
+                document.getElementById('userfullname').textContent = newData.userfullname;
+                document.getElementById('username').textContent = newData.username;
+                document.getElementById('useremail').textContent = newData.useremail;
+                document.getElementById('userphone').textContent = newData.userphone;
+                
+                alert('Profile updated successfully!');
+                document.getElementById('edit-profile-modal').style.display = 'none';
+                document.getElementById('profile-popup').style.display = 'flex';
+            } else {
+                throw new Error(data.message || 'Unknown error occurred');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            const errorElement = document.getElementById('profile-error');
+            errorElement.textContent = 'Error: ' + error.message;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        })
+        .finally(() => {
+            saveProfileBtn.disabled = false;
+            saveProfileBtn.textContent = 'Save Changes';
+        });
+    });
+}
+    if (savePasswordBtn) {
+    savePasswordBtn.addEventListener('click', function() {
+        const currentPass = document.getElementById('current-password').value;
+        const newPass = document.getElementById('new-password').value;
+        const confirmPass = document.getElementById('confirm-password').value;
+        
+        // Validate
+        if (!currentPass || !newPass || !confirmPass) {
+            alert('Please fill in all password fields');
+            return;
+        }
+        
+        if (newPass !== confirmPass) {
+            alert('New passwords do not match');
+            return;
+        }
+        
+        if (newPass.length < 8) {
+            alert('Password must be at least 8 characters');
+            return;
+        }
+
+        // Show loading state
+        savePasswordBtn.disabled = true;
+        savePasswordBtn.textContent = 'Updating...';
+
+        // Create form data
+        const formData = new FormData();
+        formData.append('current_password', currentPass);
+        formData.append('new_password', newPass);
+        formData.append('confirm_password', confirmPass);
+        formData.append('action', 'change_password');
+
+        fetch('update_profile.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text().then(text => {
+                return text ? JSON.parse(text) : {}
+            });
+        })
+        .then(data => {
+            if (data.status) {
+                alert('Password changed successfully!');
+                document.getElementById('change-password-modal').style.display = 'none';
+                document.getElementById('profile-popup').style.display = 'flex';
+            } else {
+                throw new Error(data.message || 'Password change failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message || 'An error occurred while changing password');
+        })
+        .finally(() => {
+            savePasswordBtn.disabled = false;
+            savePasswordBtn.textContent = 'Update Password';
+        });
+    });
+}
+
+    // Close modals when clicking outside
+    document.querySelectorAll('.profile-modal-container').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+                // Always return to profile view when closing
+                document.getElementById('profile-popup').style.display = 'flex';
+            }
+        });
+    });
+
+    // Close buttons for all modals
+    document.querySelectorAll('.close-button').forEach(button => {
+        button.addEventListener('click', function() {
+            this.closest('.profile-modal-container').style.display = 'none';
+            // Return to profile view when closing
+            document.getElementById('profile-popup').style.display = 'flex';
+         });
+    });
+}); // This closes the DOMContentLoaded event listener
+            
+            
+// Simple modal controller
+document.addEventListener('DOMContentLoaded', function() {
+    // Open profile modal
+    document.getElementById('profile-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('profile-popup').style.display = 'flex';
+    });
+
+    // Close any modal when clicking its close button
+    document.querySelectorAll('.close-button').forEach(button => {
+        button.addEventListener('click', function() {
+            // Find the closest modal container and hide it
+            const modal = this.closest('.profile-modal-container, .modal-overlay, .modal');
+            if (modal) modal.style.display = 'none';
+        });
+    });
+
+    // Close when clicking outside modal content
+    document.querySelectorAll('.profile-modal-container, .modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+    });
+
+    // Edit profile button
+    document.getElementById('edit-profile-btn')?.addEventListener('click', function() {
+        document.getElementById('profile-popup').style.display = 'none';
+        document.getElementById('edit-profile-modal').style.display = 'flex';
+    });
+
+    // Save profile button
+    document.getElementById('save-profile-btn')?.addEventListener('click', function() {
+        // Your save logic here...
+        document.getElementById('edit-profile-modal').style.display = 'none';
+        document.getElementById('profile-popup').style.display = 'flex';
+    });
+	// Change Password
+    document.getElementById('change-password-btn')?.addEventListener('click', function() {
+        document.getElementById('profile-popup').style.display = 'none';
+        document.getElementById('change-password-modal').style.display = 'flex';
+    });
+}); // This was missing in your original code
+</script>
+</body>
+</html>

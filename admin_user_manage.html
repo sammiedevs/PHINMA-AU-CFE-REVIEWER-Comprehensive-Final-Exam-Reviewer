@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <link rel="stylesheet" href="style.css">
+	
+    <title>User Management</title>
+</head>
+<style>
+    body{
+        background: #eee;
+    }
+    a{
+        text-decoration: none !important;
+    }
+    .cards .card img {
+            width: 50px !important;
+            height: 50px !important;
+            object-fit: cover; /* Ensures images don’t get stretched */
+        }
+        .data-container {
+            padding: 20px;
+        }
+        
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-table th, .user-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .user-table th {
+            background-color: #161041;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .user-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .action-buttons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 16px;
+        }
+        
+        .edit-btn {
+            color: #3498db;
+        }
+        
+        .delete-btn {
+            color: #e74c3c;
+        }
+        
+        .password-cell {
+            font-family: monospace;
+            color: #555;
+        }
+        
+        .password-mask {
+            letter-spacing: 2px;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .close-modal {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .submit-btn {
+            background-color: #161041;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        .submit-btn:hover {
+            background-color: #1a1a5a;
+        }
+        
+        .add-user-btn {
+            background-color: #3aa856;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .add-user-btn:hover {
+            background-color: #34974d;
+        }
+/*---------------------Profile Popup-------------------------------*/
+.profile-modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 2000;
+}
+
+.profile-modal-box {
+    background: #FAF9F6;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 25px;
+    border-radius: 20px;
+    box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1),
+                0 32px 64px -48px rgba(0, 0, 0, 0.5);
+    width: 550px;
+    margin: 0px 10px;
+    position: relative;
+}
+
+.profile-modal-box header {
+    font-size: 30px;
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #F8C019;
+    margin-bottom: 10px;
+    color: #161041;
+    background: #F59D37;
+    padding: 3px;
+    border-radius: 50px;
+    padding-left: 30px;
+    color: white;
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: 20px;
+}
+
+.profile-modal-box .field {
+    display: flex;
+    margin-bottom: 10px;
+    flex-direction: column;
+}
+
+.profile-modal-box .fbtn {
+    height: 35px;
+    background: #161041;
+    border: 0;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all .3s;
+    margin-top: 10px;
+    padding: 0px 10px;
+}
+
+.profile-modal-box .fbtn:hover {
+    opacity: 0.9;
+    background: #050672;
+}
+
+.profile-modal-box .close-button img {
+    position: absolute;
+    right: 0;
+    margin: 10px 30px;
+    cursor: pointer;
+    font-size: 25px;
+    transform: transform 0.3s;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    margin-top: -3px;
+    border-radius: 50px;
+}
+
+.profile-modal-box .close-button img:hover {
+    opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .profile-modal-box {
+        width: 90%;
+        padding: 20px 15px;
+    }
+    
+    .profile-modal-box header {
+        font-size: 24px;
+        padding-left: 20px;
+    }
+    
+    .profile-modal-box .close-button img {
+        width: 30px;
+        height: 30px;
+        margin: 5px 15px;
+    }
+}
+
+
+        
+/* Form controls for edit modals */
+.profile-modal-box .form-control {
+    height: 40px;
+    width: 100%;
+    font-size: 16px;
+    padding: 0 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    margin-top: 5px;
+}
+
+/* Password requirements indicator */
+.password-requirements {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Error messages */
+.error-message {
+    color: #AA4A44;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+</style>
+<body>
+    <!-- Sidebar -->
+    <section id="sidebar">
+        <a href="admin_dashboard.html" class="brand">
+            <img src="img/logo.jpg">
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="admin_dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="admin_user_manage.html">
+                    <i class="fas fa-users"></i>
+                    <span class="text">User Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="admin_feedback.html">
+                    <i class="fas fa-comments"></i>
+                    <span class="text">Feedback List</span>
+                </a>
+            </li>
+            
+        </ul>
+        <ul class="side-menu bot" style="margin-top: 520px;">
+            <li>
+                <a href="admin_login.html">
+                    <i style="color: #AA4A44;" class="fas fa-sign-out-alt"></i>
+                    <span style="color: #AA4A44;" class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Content -->
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu' id="sidebar-toggle"></i>
+            <a href="#" class="nav-link">Categories</a>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class='bx bx-search-alt-2'></i></button>
+                </div>
+            </form>
+            <a href="#" class="profile" id="profile-btn">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </nav>
+
+        <main>
+        <div class="head-title">
+            <div class="left">
+                <h1>User Management</h1>
+                <ul class="breadcrumb">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li><a class="active" href="#">User Management</a></li>
+                </ul>
+            </div>
+        </div>
+
+
+		
+        <div class="data-container">
+            <button class="add-user-btn" onclick="openUserModal()">
+                <i class="fas fa-plus"></i> Add New User
+            </button>
+
+            <div class="table-responsive">
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Phone</th>
+                            <th>User Type</th>
+                            <th>Password</th>
+                            <th>Update</th>
+							<th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <tr>
+                            <td colspan="8" style="text-align: center;">Loading users...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalTitle">Add New User</h2>
+            <form id="userForm">
+                <input type="hidden" id="user_id">
+                <div class="form-group">
+                    <label for="userfullname">Full Name</label>
+                    <input type="text" id="userfullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="useremail">Email</label>
+                    <input type="email" id="useremail" required>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="userphone">Phone Number</label>
+                    <input type="tel" id="userphone" required>
+                </div>
+                <div class="form-group">
+                    <label for="usertype">User Type</label>
+                    <select id="usertype" required>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="userpassword">Password</label>
+                    <input type="password" id="userpassword" placeholder="Leave blank to keep current password">
+                </div>
+                <button type="submit" class="submit-btn">Save User</button>
+            </form>
+        </div>
+    </div>
+
+    </section>
+
+    <!-- Notification Modal -->
+    <div id="notif-modal" class="notif">
+        <div class="notif-content">
+            <div class="close-button">
+            	<img src="img/back-button.png">
+        	</div>
+            <h2>Notifications</h2>
+            
+            <!-- Study Reminders Section -->
+            <h3>Study Reminders</h3>
+            <ul id="study-reminders">
+                <!-- Study reminders will be dynamically added here -->
+            </ul>
+
+            <!-- Exam Updates Section -->
+            <h3>Exam Updates</h3>
+            <ul id="exam-updates">
+                <!-- Exam updates will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+        
+<!-- Profile Modal -->
+<div class="profile-modal-container" id="profile-popup">
+    <div class="profile-modal-box">
+        <div class="close-button">
+            <img src="img/back-button.png">
+        </div>
+        <header>PROFILE</header>
+        <div class="profile-info">
+            <div class="field">
+                <label>Full Name</label>
+                <p id="userfullname">Loading...</p>
+            </div>
+            <div class="field">
+                <label>Username</label>
+                <p id="username">Loading...</p>
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <p id="useremail">Loading...</p>
+            </div>
+            <div class="field">
+                <label>Phone Number</label>
+                <p id="userphone">Loading...</p>
+            </div>
+        </div>
+        <div class="field">
+            <button class="fbtn" id="edit-profile-btn">Edit Profile</button>
+        </div>
+    </div>
+</div>
+        
+<!-- Edit Profile Modal -->
+<div class="profile-modal-container" id="edit-profile-modal">
+    <div class="profile-modal-box">
+        <div class="close-button">
+            <img src="img/back-button.png">
+        </div>
+        <header>EDIT PROFILE</header>
+        <div class="profile-info">
+            <div class="field">
+                <label>Full Name</label>
+                <input type="text" id="edit-fullname" class="form-control">
+            </div>
+            <div class="field">
+                <label>Username</label>
+                <input type="text" id="edit-username" class="form-control">
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="edit-email" class="form-control">
+            </div>
+            <div class="field">
+                <label>Phone Number</label>
+                <input type="tel" id="edit-phone" class="form-control">
+            </div>
+        </div>
+        <div class="field">
+            <button class="fbtn" id="save-profile-btn">Save Changes</button>
+			<button class="fbtn" id="change-password-btn" style="margin-top: 10px;">Change Password</button>
+        </div>
+		<!-- Add this to your edit profile modal -->
+<div id="profile-error" class="error-message" style="color: red; margin: 10px 0; display: none;"></div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="profile-modal-container" id="change-password-modal">
+    <div class="profile-modal-box">
+        <div class="close-button">
+            <img src="img/back-button.png">
+        </div>
+        <header>CHANGE PASSWORD</header>
+        <div class="profile-info">
+            <div class="field">
+                <label>Current Password</label>
+                <input type="password" id="current-password" class="form-control" required>
+            </div>
+            <div class="field">
+                <label>New Password</label>
+                <input type="password" id="new-password" class="form-control" required>
+            </div>
+            <div class="field">
+                <label>Confirm New Password</label>
+                <input type="password" id="confirm-password" class="form-control" required>
+            </div>
+        </div>
+        <div class="field">
+            <button class="fbtn" id="save-password-btn">Update Password</button>
+        </div>
+    </div>
+</div>
+        
+        
+ <!-- Modal for Adding Event -->
+    <div class="modal fade" id="event_entry_modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Add New Event</h5>
+                    <div class="close-button" data-dismiss="modal" aria-label="Close">
+                            <img src="img/back-button.png">
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="event_name">Event name</label>
+                        <input type="text" name="event_name" id="event_name" class="form-control" placeholder="Enter your event name">
+                    </div>
+                    <div class="form-group">
+                        <label for="event_start_date">Event start</label>
+                        <input type="date" name="event_start_date" id="event_start_date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="event_end_date">Event end</label>
+                        <input type="date" name="event_end_date" id="event_end_date" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="save_event()">Save Event</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize modal
+    const modal = document.getElementById('userModal');
+    const closeModalBtn = modal.querySelector('.close-modal');
+    
+    closeModalBtn.onclick = function() {
+        modal.style.display = 'none';
+    };
+    
+    // Load users
+    loadUsers();
+    
+    // Attach form submit handler
+    document.getElementById('userForm').addEventListener('submit', handleUserFormSubmit);
+});
+
+async function loadUsers() {
+    const tbody = document.getElementById('userTableBody');
+    
+    try {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading users...</td></tr>';
+        
+        const response = await fetch('user_crud.php');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: red;">${data.error}</td></tr>`;
+            return;
+        }
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No users found</td></tr>';
+            return;
+        }
+        
+        // Clear loading message
+        tbody.innerHTML = '';
+        
+        // Add user rows
+        data.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.userfullname || '-'}</td>
+                <td>${user.useremail || '-'}</td>
+                <td>${user.username || '-'}</td>
+                <td>${user.userphone || '-'}</td>
+                <td>${user.usertype || '-'}</td>
+                <td class="password-cell"><span class="password-mask">••••••••</span></td>
+                <td class="action-buttons">
+                    <button onclick="openUserModal(${user.id})" class="edit-btn" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+                <td class="action-buttons">
+                    <button onclick="deleteUser(${user.id})" class="delete-btn" title="Delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error loading users:', error);
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" style="text-align: center; color: red;">
+                    Error loading users: ${error.message}
+                    <button onclick="loadUsers()" style="margin-left:10px;">Retry</button>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+async function openUserModal(userId = null) {
+    const modal = document.getElementById('userModal');
+    const title = modal.querySelector('#modalTitle');
+    const form = document.getElementById('userForm');
+    
+    // Reset form and clear user_id for new users
+    form.reset();
+    document.getElementById('user_id').value = '';
+    
+    if (userId) {
+        title.textContent = 'Edit User';
+        try {
+            const response = await fetch(`user_crud.php?user_id=${userId}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const user = await response.json();
+            
+            document.getElementById('user_id').value = user.id;
+            document.getElementById('useremail').value = user.useremail || '';
+            document.getElementById('username').value = user.username || '';
+            document.getElementById('userfullname').value = user.userfullname || '';
+            document.getElementById('userphone').value = user.userphone || '';
+            document.getElementById('usertype').value = user.usertype || 'student';
+            document.getElementById('userpassword').value = '';
+            document.getElementById('userpassword').placeholder = 'Leave blank to keep current';
+        } catch (error) {
+            console.error('Error fetching user:', error);
+            alert('Failed to load user: ' + error.message);
+            return;
+        }
+    } else {
+        title.textContent = 'Add User';
+        document.getElementById('userpassword').placeholder = 'Enter password';
+    }
+    
+    modal.style.display = 'block';
+}
+
+async function handleUserFormSubmit(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
+    
+    try {
+        const formData = {
+            user_id: document.getElementById('user_id').value,
+            useremail: document.getElementById('useremail').value,
+            username: document.getElementById('username').value,
+            userfullname: document.getElementById('userfullname').value,
+            userphone: document.getElementById('userphone').value,
+            usertype: document.getElementById('usertype').value,
+            userpassword: document.getElementById('userpassword').value
+        };
+        
+        // Validate required fields for new users
+        if (!formData.user_id && (!formData.userpassword || formData.userpassword.trim() === '')) {
+            throw new Error('Password is required for new users');
+        }
+        
+        const isEdit = !!formData.user_id;
+        const method = isEdit ? 'PUT' : 'POST';
+        
+        const response = await fetch('user_crud.php', {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Request failed');
+        }
+        
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+        
+        alert(`User ${isEdit ? 'updated' : 'created'} successfully!`);
+        document.getElementById('userModal').style.display = 'none';
+        loadUsers();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Save';
+    }
+}
+
+async function deleteUser(userId) {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+    
+    try {
+        const response = await fetch('user_crud.php', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_id: userId })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Delete failed');
+        }
+
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+        
+        alert('User deleted successfully!');
+        loadUsers();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+    }
+}
+
+// Make functions available globally
+window.openUserModal = openUserModal;
+window.deleteUser = deleteUser;
+    </script>
+        
+        
+<script>
+        // Open profile modal
+document.getElementById('profile-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('profile-popup').style.display = 'flex';
+});
+
+// Close ALL modals when clicking close buttons
+document.querySelectorAll('.close-button').forEach(button => {
+    button.addEventListener('click', function() {
+        document.querySelectorAll('.profile-modal-container').forEach(modal => {
+            modal.style.display = 'none';
+        });
+    });
+});
+
+// Close when clicking outside modal content
+document.querySelectorAll('.profile-modal-container').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) { // If clicking the backdrop (not the content)
+            this.style.display = 'none';
+        }
+    });
+});
+            
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Profile Modal Functions
+    const editProfileBtn = document.getElementById('edit-profile-btn');
+    const changePasswordBtn = document.getElementById('change-password-btn');
+    const saveProfileBtn = document.getElementById('save-profile-btn');
+    const savePasswordBtn = document.getElementById('save-password-btn');
+
+    // Only add event listeners if elements exist
+    if (editProfileBtn) {
+        editProfileBtn.addEventListener('click', function() {
+            // Populate edit form with current data
+            document.getElementById('edit-fullname').value = document.getElementById('userfullname').textContent;
+            document.getElementById('edit-username').value = document.getElementById('username').textContent;
+            document.getElementById('edit-email').value = document.getElementById('useremail').textContent;
+            document.getElementById('edit-phone').value = document.getElementById('userphone').textContent;
+            
+            // Show edit modal
+            document.getElementById('profile-popup').style.display = 'none';
+            document.getElementById('edit-profile-modal').style.display = 'flex';
+        });
+    }
+
+    if (changePasswordBtn) {
+        changePasswordBtn.addEventListener('click', function() {
+            // Clear password fields
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+            
+            // Show change password modal
+            document.getElementById('profile-popup').style.display = 'none';
+            document.getElementById('change-password-modal').style.display = 'flex';
+        });
+    }
+
+    // Update the saveProfileBtn click handler
+// Update the saveProfileBtn click handler
+// Update the saveProfileBtn click handler
+if (saveProfileBtn) {
+    saveProfileBtn.addEventListener('click', function() {
+        // Create an object with only changed values
+        const currentData = {
+            userfullname: document.getElementById('userfullname').textContent,
+            username: document.getElementById('username').textContent,
+            useremail: document.getElementById('useremail').textContent,
+            userphone: document.getElementById('userphone').textContent
+        };
+
+        const newData = {
+            userfullname: document.getElementById('edit-fullname').value || currentData.userfullname,
+            username: document.getElementById('edit-username').value || currentData.username,
+            useremail: document.getElementById('edit-email').value || currentData.useremail,
+            userphone: document.getElementById('edit-phone').value || currentData.userphone
+        };
+
+        // Check if anything actually changed
+        let changes = false;
+        for (const key in newData) {
+            if (newData[key] !== currentData[key]) {
+                changes = true;
+                break;
+            }
+        }
+
+        if (!changes) {
+            alert('No changes were made');
+            return;
+        }
+
+        // Show loading state
+        saveProfileBtn.disabled = true;
+        saveProfileBtn.textContent = 'Saving...';
+
+        // AJAX call with changed data only
+        fetch('update_profile.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'update_profile',
+                ...newData
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status) {
+                // Update displayed values
+                document.getElementById('userfullname').textContent = newData.userfullname;
+                document.getElementById('username').textContent = newData.username;
+                document.getElementById('useremail').textContent = newData.useremail;
+                document.getElementById('userphone').textContent = newData.userphone;
+                
+                alert('Profile updated successfully!');
+                document.getElementById('edit-profile-modal').style.display = 'none';
+                document.getElementById('profile-popup').style.display = 'flex';
+            } else {
+                throw new Error(data.message || 'Unknown error occurred');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            const errorElement = document.getElementById('profile-error');
+            errorElement.textContent = 'Error: ' + error.message;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        })
+        .finally(() => {
+            saveProfileBtn.disabled = false;
+            saveProfileBtn.textContent = 'Save Changes';
+        });
+    });
+}
+    if (savePasswordBtn) {
+    savePasswordBtn.addEventListener('click', function() {
+        const currentPass = document.getElementById('current-password').value;
+        const newPass = document.getElementById('new-password').value;
+        const confirmPass = document.getElementById('confirm-password').value;
+        
+        // Validate
+        if (!currentPass || !newPass || !confirmPass) {
+            alert('Please fill in all password fields');
+            return;
+        }
+        
+        if (newPass !== confirmPass) {
+            alert('New passwords do not match');
+            return;
+        }
+        
+        if (newPass.length < 8) {
+            alert('Password must be at least 8 characters');
+            return;
+        }
+
+        // Show loading state
+        savePasswordBtn.disabled = true;
+        savePasswordBtn.textContent = 'Updating...';
+
+        // Create form data
+        const formData = new FormData();
+        formData.append('current_password', currentPass);
+        formData.append('new_password', newPass);
+        formData.append('confirm_password', confirmPass);
+        formData.append('action', 'change_password');
+
+        fetch('update_profile.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text().then(text => {
+                return text ? JSON.parse(text) : {}
+            });
+        })
+        .then(data => {
+            if (data.status) {
+                alert('Password changed successfully!');
+                document.getElementById('change-password-modal').style.display = 'none';
+                document.getElementById('profile-popup').style.display = 'flex';
+            } else {
+                throw new Error(data.message || 'Password change failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message || 'An error occurred while changing password');
+        })
+        .finally(() => {
+            savePasswordBtn.disabled = false;
+            savePasswordBtn.textContent = 'Update Password';
+        });
+    });
+}
+
+    // Close modals when clicking outside
+    document.querySelectorAll('.profile-modal-container').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+                // Always return to profile view when closing
+                document.getElementById('profile-popup').style.display = 'flex';
+            }
+        });
+    });
+
+    // Close buttons for all modals
+    document.querySelectorAll('.close-button').forEach(button => {
+        button.addEventListener('click', function() {
+            this.closest('.profile-modal-container').style.display = 'none';
+            // Return to profile view when closing
+            document.getElementById('profile-popup').style.display = 'flex';
+         });
+    });
+}); // This closes the DOMContentLoaded event listener
+            
+            
+// Simple modal controller
+document.addEventListener('DOMContentLoaded', function() {
+    // Open profile modal
+    document.getElementById('profile-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('profile-popup').style.display = 'flex';
+    });
+
+    // Close any modal when clicking its close button
+    document.querySelectorAll('.close-button').forEach(button => {
+        button.addEventListener('click', function() {
+            // Find the closest modal container and hide it
+            const modal = this.closest('.profile-modal-container, .modal-overlay, .modal');
+            if (modal) modal.style.display = 'none';
+        });
+    });
+
+    // Close when clicking outside modal content
+    document.querySelectorAll('.profile-modal-container, .modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+    });
+
+    // Edit profile button
+    document.getElementById('edit-profile-btn')?.addEventListener('click', function() {
+        document.getElementById('profile-popup').style.display = 'none';
+        document.getElementById('edit-profile-modal').style.display = 'flex';
+    });
+
+    // Save profile button
+    document.getElementById('save-profile-btn')?.addEventListener('click', function() {
+        // Your save logic here...
+        document.getElementById('edit-profile-modal').style.display = 'none';
+        document.getElementById('profile-popup').style.display = 'flex';
+    });
+	// Change Password
+    document.getElementById('change-password-btn')?.addEventListener('click', function() {
+        document.getElementById('profile-popup').style.display = 'none';
+        document.getElementById('change-password-modal').style.display = 'flex';
+    });
+}); // This was missing in your original code
+</script>
+        
+<script src="notif.js"></script>
+<script src="fetch_profile.js"></script>
+        
+</body>
+</html>

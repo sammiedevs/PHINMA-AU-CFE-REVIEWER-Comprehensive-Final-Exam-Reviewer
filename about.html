@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>About Us</title>
+</head>
+
+<body>
+
+    <div class="home" id="home">
+        <div class="navbar">
+            <a class="logo" href="index.html"><img src="img/logo.jpg" alt=""></a>
+            <ul class="navbar-list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><button type="button" class="lbtn" id="popup-button">LOGIN</button></li>
+            </ul>
+
+            <div class="navbar-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="main-cont about">
+
+        <div class="front-img about">
+            <img src="img/front-img.jpg" alt="">
+        </div>
+
+
+        <div class="front-text about">
+            <h1 style="color: #F59D37;"><br>About Us</h1>
+
+            <p>We are dedicated to enhancing educational experiences by providing comprehensive tools for effective learning review and evaluation. Our platform empowers educators, administrators, and stakeholders with the resources they need to assess, monitor, and improve learning outcomes at all levels. Through data-driven insights, real-time feedback, and collaborative features, we support informed decision-making that drives continuous improvement in teaching and learning.</p>
+
+            <p>By fostering collaboration between educators, students, and families, we help build a culture of accountability and growth within educational institutions. Our platform ensures that every learner's potential is fully realized, empowering schools and organizations to refine practices, adapt to evolving needs, and ultimately enhance the quality of education for all.</p>
+
+    
+        </div>
+    
+        
+    </div>
+
+
+
+
+    <footer class="footer-distributed">
+        <div class="footer-left">
+            <img src="img/flogo.png" style="width:350px; height:auto;">
+
+            <p class="footer-links">
+                <a href="index.html">Home</a>
+                |
+                <a href="contact.html">Contact</a>
+                |
+                <a href="about.html">About Us</a>
+            </p>
+
+            <p class="footer-company-name">Copyright © 2025 CFE Reviewer Team. All rights reserved.</p>
+        </div>
+
+        <div class="footer-center">
+            <div>
+                <i class="fas fa-users"></i>
+                <p>CFE Reviewer Team</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+63 992 673 1512</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="">cfereviewerteam@phinmaed.com</a></p>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>About CFE Reviewer</span>
+                OUR MISSION IS TO MAKE CFE REVIEW AND EXAM EASIER THROUGH OUR SYSTEM. <br> CFE Reviewer Team has provided quality reviewer to underserved learnings.
+            </p>
+            <div class="footer-icons">
+                <a href="https://www.facebook.com/phinmaau/"><i class="fab fa-facebook-square"></i></a>
+                <a href="https://x.com/phinmaau?mx=2"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/phinmaau/"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/user/phinmaed"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+    <!--------------------------Popups------------------------------------------------------------------->
+    <div class="container" id="login-popup">
+        <div class="box form-box" id="popup">
+            <div class="close-button">
+                <img src="img/back-button.png">
+            </div>
+            <header>LOGIN</header>
+            <form id="login-form">
+                
+                <div class="field input">
+                    <label for="useremail">Email</label>
+                    <input type="text" name="useremail" id="useremail" placeholder="Enter your email" autocomplete="off" required>
+                </div> 
+    
+                <div class="field input">
+                    <label for="userpassword">Password</label>
+                    <input type="password" name="userpassword" id="userpassword" placeholder="Enter your password" autocomplete="off" required>
+                </div>
+                
+                <div class="field">
+                    <input type="submit" class="fbtn" name="submit" value="Login" required>
+                </div>
+                <div class="links">
+                    Doesn't have an account? <a href="#" onclick="openSignUp(); return false;">REGISTER NOW</a>
+                </div>
+            </form>
+        </div>
+     </div>
+    
+    
+    
+    
+     <div class="container" id="signup-popup">
+        <div class="box form-box" id="popup">
+            <div class="close-button" onclick="closeSignup()">
+                <img src="img/back-button.png">
+            </div>
+            <header>CREATE ACCOUNT</header>
+            <form id="register-form">
+    
+                <div class="field input">
+                    <label for="name">Full Name</label>
+                    <input type="text" name="name" id="name" placeholder="Enter your full name" autocomplete="off" required>
+                </div> 
+                
+                <div class="field input">
+                    <label for="useremail">Email</label>
+                    <input type="email" name="useremail" id="useremail" placeholder="Enter your email" autocomplete="off" required>
+                </div> 
+    
+                <div class="field input">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" placeholder="Enter your username" autocomplete="off" required>
+                </div> 
+    
+                <div class="field input">
+                    <label for="number">Mobile Number</label>
+                    <input type="text" name="number" id="number" placeholder="Enter your mobile number" autocomplete="off" required>
+                </div> 
+    
+                <div class="field input">
+                    <label for="userpassword">Create your password</label>
+                    <input type="password" name="userpassword" id="userpassword" placeholder="Enter your password" autocomplete="off" required>
+                </div>
+    
+                <div class="field input">
+                    <label for="userpassword1">Re-type your password</label>
+                    <input type="password" name="userpassword1" id="userpassword1" placeholder="Re-type your password" autocomplete="off" required>
+                </div>
+    
+                
+    
+                <div class="field">
+                    <input type="submit" class="fbtn" name="submit" value="Register" required>
+                </div>
+                <div class="links">
+                    Already have an account? <a href="#" onclick="openLogin()">SIGN UP NOW</a>
+                </div>
+            </form>
+        </div>
+     </div>
+ 
+<!--------------------------Popups------------------------------------------------------------------->
+
+
+
+
+
+
+
+<script src="script.js"></script>
+
+    
+</body>
+</html>
