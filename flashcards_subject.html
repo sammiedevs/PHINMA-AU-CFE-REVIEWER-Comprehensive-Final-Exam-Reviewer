@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Subjects</title>
+    <style>
+        body {
+            background: #eee;
+        }
+        .data {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .page {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #F59D37;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+        .page h1 {
+            font-size: 35px;
+            color: #161041;
+            margin: 0;
+        }
+        .subject-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 10px;
+        }
+        .subject-button {
+            margin-top: 5px;
+            background: #f0f0f0;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .subject-button:hover {
+            background: #161041;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .subject-button:hover .subject-name {
+            color: white;
+        }
+        .subject-button .subject-name {
+            font-size: 18px;
+            font-weight: 500;
+            color: #161041;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .subject-button .subject-name i {
+            font-size: 20px;
+            color: #F59D37;
+        }
+        .add-subject-button {
+            position: relative;
+            width: 150px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border: 1px solid #34974d;
+            background-color: #3aa856;
+            overflow: hidden;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .add-subject-button, .button__icon, .button__text {
+            transition: all 0.3s;
+        }
+        .add-subject-button .button__text {
+            color: #fff;
+            font-weight: 600;
+            text-align: left;
+            flex-grow: 1;
+        }
+        .add-subject-button .button__icon {
+            position: absolute;
+            right: 0;
+            height: 100%;
+            width: 39px;
+            background-color: #34974d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(calc(100% - 30px));
+        }
+        .add-subject-button .svg {
+            width: 30px;
+            stroke: #fff;
+            padding-right: 10px;
+        }
+        .add-subject-button:hover {
+            background: #34974d;
+        }
+        .add-subject-button:hover .button__text {
+            color: transparent;
+        }
+        .add-subject-button:hover .button__icon {
+            width: 100%;
+            transform: translateX(0);
+        }
+        .add-subject-button:active .button__icon {
+            background-color: #2e8644;
+        }
+        .add-subject-button:active {
+            border: 1px solid #2e8644;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <section id="sidebar">
+        <a href="student_dashboard.html" class="brand">
+            <img src="img/logo.jpg">
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="student_dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_reviewer.html">
+                    <i class="fas fa-book"></i>
+                    <span class="text">Study Materials</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="student_practice.html">
+                    <i class="fas fa-tools"></i>
+                    <span class="text">Practice Tools</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_calendar.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="text">Calendar</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_feedback.html">
+                    <i class="fas fa-comments"></i>
+                    <span class="text">Feedback</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu bot" style="margin-top: 420px !important;">
+            <li>
+                <a href="index.html">
+                    <i style="color: #AA4A44;" class="fas fa-sign-out-alt"></i>
+                    <span style="color: #AA4A44;" class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <a href="#" class="nav-link">Categories</a>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class='bx bx-search-alt-2'></i></button>
+                </div>
+            </form>
+            <a href="#" class="notification" id="notification-btn">
+                <i class='bx bxs-bell'></i>
+                <span class="num"></span>
+            </a>
+            <a href="#" class="profile" id="profile-btn">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </nav>
+
+        <main>
+            <div class="head-title" style="margin-bottom: 30px;">
+                <div class="left">
+                    <h1>Subjects</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="student_dashboard.html">Dashboard</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a href="student_practice.html">Practice Tools</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="#">Subjects</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="data">
+                <div class="page">
+                    <h1>Subjects</h1>
+                    <button class="add-subject-button" onclick="openModal()">
+                        <span class="button__text">Add Subject</span>
+                        <span class="button__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg">
+                                <line y2="19" y1="5" x2="12" x1="12"></line>
+                                <line y2="12" y1="12" x2="19" x1="5"></line>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+                <div class="subject-list" id="subjectList">
+                    <!-- Subjects will be dynamically added here -->
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <!-- Modal for Adding Subject -->
+    <div class="container" id="addSubjectModal">
+        <div class="box form-box" id="popup">
+            <div class="close-button" onclick="closeModal()">
+                <img src="img/back-button.png">
+            </div>
+            <header>Add Subject</header>
+            <form id="subject-form">
+                <div class="field input">
+                    <label for="subjectTitle">Subject</label>
+                    <input type="text" name="title" id="subjectTitle" placeholder="Enter subject here" autocomplete="off" required>
+                </div>
+                <div class="field">
+                    <input type="submit" class="fbtn" name="submit" value="Submit" required>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Load jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Your Custom Scripts -->
+    <script>
+        let currentIndex = 0;
+        let flashcards = [];
+        let subject = new URLSearchParams(window.location.search).get('subject');
+
+        // Set the subject title
+        document.getElementById('subjectTitle').innerText = subject;
+
+        // Fetch flashcards for the selected subject
+        function fetchFlashcards() {
+            $.ajax({
+                url: `fetch_flashcards.php?subject=${encodeURIComponent(subject)}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    flashcards = response;
+                    updateFlashcard();
+                },
+                error: function(xhr, status, error) {
+                    alert('Error fetching flashcards: ' + error);
+                }
+            });
+        }
+
+        // Update the flashcard display
+        function updateFlashcard() {
+            if (flashcards.length > 0) {
+                document.getElementById('flashcardFront').innerText = flashcards[currentIndex].term;
+                document.getElementById('flashcardBack').innerText = flashcards[currentIndex].definition;
+            }
+        }
+
+        // Handle previous button click
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (flashcards.length > 0) {
+                currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+                updateFlashcard();
+            }
+        });
+
+        // Handle next button click
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (flashcards.length > 0) {
+                currentIndex = (currentIndex + 1) % flashcards.length;
+                updateFlashcard();
+            }
+        });
+
+        // Flip the flashcard on click
+        document.getElementById('flashcard').addEventListener('click', () => {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        });
+
+        // Open the modal
+        function openModal() {
+            document.getElementById('addSubjectModal').style.display = 'block';
+        }
+
+        // Close the modal
+        function closeModal() {
+            document.getElementById('addSubjectModal').style.display = 'none';
+        }
+
+        // Handle form submission
+        document.getElementById('subject-form').onsubmit = function(e) {
+            e.preventDefault();
+            var term = document.getElementById('subjectTitle').value;
+            var definition = document.getElementById('subjectContent').value;
+
+            if (term && definition) {
+                saveFlashcard(term, definition);
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        };
+
+        // Save flashcard
+        function saveFlashcard(term, definition) {
+            $.ajax({
+                url: 'save_flashcard.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    subject: subject,
+                    term: term,
+                    definition: definition
+                },
+                success: function(response) {
+                    if (response.status) {
+                        alert(response.msg);
+                        closeModal();
+                        fetchFlashcards(); // Refresh the flashcards list
+                    } else {
+                        alert(response.msg);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Error saving flashcard: ' + error);
+                }
+            });
+        }
+
+        // Fetch flashcards on page load
+        document.addEventListener('DOMContentLoaded', fetchFlashcards);
+    </script>
+</body>
+</html>

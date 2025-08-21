@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Progress Tracking</title>
+</head>
+<style>
+    body {
+        background: #eee;
+    }
+	/* Subject List Styles */
+    .subject-list {
+        width: 100%; /* Make the list take up full width */
+        display: flex;
+        flex-direction: column; /* Stack items vertically */
+        gap: 5px; /* Space between items */
+        padding: 10px;
+    }
+
+    .subject-button {
+        margin-top: 5px;
+        background: #f0f0f0;
+        padding: 15px 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: left; /* Align text to the left */
+        transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        justify-content: space-between; /* Space between subject name and actions */
+        align-items: center;
+        width: 100%; /* Make each button take up full width */
+    }
+
+    .subject-button:hover {
+        background: #161041;
+        transform: translateY(-2px); /* Slight lift on hover */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+    }
+    .subject-button:hover .subject-name {
+        color: white; /* Change text color to white on hover */
+    }
+
+    .subject-button .subject-name {
+        font-size: 18px;
+        font-weight: 500;
+        color: #161041; /* Dark blue for subject name */
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between icon and text */
+    }
+
+    .subject-button .subject-name i {
+        font-size: 20px; /* Icon size */
+        color: #F59D37; /* Icon color */
+    }
+
+    .add-subject-button {
+        position: relative;
+        width: 150px;
+        height: 40px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        border: 1px solid #34974d;
+        background-color: #3aa856;
+        overflow: hidden; /* Ensure the icon doesn't overflow */
+        padding-left: 10px; /* Add left padding to align text */
+        padding-right: 10px;
+    }
+
+    .add-subject-button, .button__icon, .button__text {
+        transition: all 0.3s;
+    }
+
+    .add-subject-button .button__text {
+        color: #fff;
+        font-weight: 600;
+        text-align: left; /* Align text to the left */
+        flex-grow: 1; /* Allow text to take up remaining space */
+    }
+
+    .add-subject-button .button__icon {
+        position: absolute;
+        right: 0; /* Position icon on the right */
+        height: 100%;
+        width: 39px;
+        background-color: #34974d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(calc(100% - 30px)); /* Partially show the icon */
+    }
+
+    .add-subject-button .svg {
+        width: 30px;
+        stroke: #fff;
+        padding-right: 10px;
+    }
+
+    .add-subject-button:hover {
+        background: #34974d;
+    }
+
+    .add-subject-button:hover .button__text {
+        color: transparent; /* Hide text on hover */
+    }
+
+    .add-subject-button:hover .button__icon {
+        width: 100%; /* Expand icon to full width on hover */
+        transform: translateX(0); /* Move icon to the left */
+    }
+
+    .add-subject-button:active .button__icon {
+        background-color: #2e8644; /* Change icon background on active */
+    }
+
+    .add-subject-button:active {
+        border: 1px solid #2e8644; /* Change border color on active */
+    }
+
+    .data {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .page {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #F59D37;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    .page button {
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .page h1 {
+        font-size: 35px;
+        color: #161041;
+        margin: 0;
+    }
+</style>
+<body>
+
+    <!-- Sidebar -->
+    <section id="sidebar">
+        <a href="student_dashboard.html" class="brand">
+            <img src="img/logo.jpg">
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="student_dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_reviewer.html">
+                    <i class="fas fa-book"></i>
+                    <span class="text">Study Materials</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_practice.html">
+                    <i class="fas fa-tools"></i>
+                    <span class="text">Practice Tools</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="student_progress.html">
+                    <i class="fas fa-tasks"></i>
+                    <span class="text">Progress Tracking</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_calendar.html">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="text">Calendar</span>
+                </a>
+            </li>
+            <li>
+                <a href="student_feedback.html">
+                    <i class="fas fa-comments"></i>
+                    <span class="text">Feedback</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu bot">
+            <li>
+                <a href="index.html">
+                    <i style="color: #AA4A44;" class="fas fa-sign-out-alt"></i>
+                    <span style="color: #AA4A44;" class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <a href="#" class="nav-link">Categories</a>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class='bx bx-search-alt-2'></i></button>
+                </div>
+            </form>
+            <a href="#" class="notification" id="notification-btn">
+                <i class='bx bxs-bell'></i>
+                <span class="num"></span>
+            </a>
+            <a href="#" class="profile" id="profile-btn">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </nav>
+
+        <main>
+            <div class="head-title" style="margin-bottom: 30px;">
+                <div class="left">
+                    <h1>Progress Tracking Page</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="#">Dashboard</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="#">Progress Tracking</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="table-data">
+                <div class="recent">
+                    <div class="head">
+                        <h3>Progress Tracking</h3>
+                    </div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Cost Accounting & Control (COSMAN 1)</td>
+                                <td><progress value="50" max="100"></progress> 50%</td>
+                            </tr>
+                            <tr>
+                                <td>Financial Markets (FINMAN 1)</td>
+                                <td><progress value="0" max="100"></progress> 0%</td>
+                            </tr>
+                            <tr>
+                                <td>Managerial Economics (BUSECO 1)</td>
+                                <td><progress value="0" max="100"></progress> 0%</td>
+                            </tr>
+                            <tr>
+                                <td>Auditing and Assurance Principles (EXTAUD 1)</td>
+                                <td><progress value="0" max="100"></progress> 0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+    <!-- Notification Modal -->
+    <div id="notif-modal" class="notif">
+        <div class="notif-content">
+            <div class="close-button">
+            	<img src="img/back-button.png">
+        	</div>
+            <h2>Notifications</h2>
+            
+            <!-- Study Reminders Section -->
+            <h3>Study Reminders</h3>
+            <ul id="study-reminders">
+                <!-- Study reminders will be dynamically added here -->
+            </ul>
+
+            <!-- Exam Updates Section -->
+            <h3>Exam Updates</h3>
+            <ul id="exam-updates">
+                <!-- Exam updates will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+        
+     <!-- Profile Modal -->
+<div class="container" id="profile-popup">
+    <div class="box form-box" id="popup">
+        <div class="close-button">
+            <img src="img/back-button.png">
+        </div>
+        <header>PROFILE</header>
+        <div class="profile-info">
+            <div class="field">
+                <label for="userfullname">Full Name</label>
+                <p id="userfullname">Loading...</p>
+            </div>
+            <div class="field">
+                <label for="username">Username</label>
+                <p id="username">Loading...</p>
+            </div>
+            <div class="field">
+                <label for="useremail">Email</label>
+                <p id="useremail">Loading...</p>
+            </div>
+            <div class="field">
+                <label for="userphone">Phone Number</label>
+                <p id="userphone">Loading...</p>
+            </div>
+        </div>
+        <div class="field">
+            <button class="fbtn" id="edit-profile-btn">Edit Profile</button>
+        </div>
+    </div>
+</div>
+
+    <script src="notif.js"></script>
+    <script src="fetch_profile.js"></script>
+</body>
+</html>
